@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "ecom-user-service"
+version = "0.1.0"
+description = ""
+authors = ["vlad <vladk6813@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.11"
+uvicorn = "^0.34.0"
+alembic = "^1.14.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.38"}
+python-jose = {extras = ["cryptography"], version = "^3.4.0"}
+pydantic-settings = "^2.8.1"
+asyncpg = "^0.30.0"
+dependency-injector = "^4.46.0"
+bcrypt = "^4.3.0"
+python-multipart = "^0.0.20"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
