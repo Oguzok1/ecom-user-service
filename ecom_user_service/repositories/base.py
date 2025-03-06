@@ -63,15 +63,20 @@ class BaseRepository[Model]:
 
     async def update(
         self,
-        session: AsyncSession | None = None,
         *whereclause,
+        session: AsyncSession | None = None,
         **kwargs
-    ) -> None:
+    ) -> Model:
+        print(f"{whereclause=}")
+        print(f"{session=}")
+        print(f"{kwargs=}")
         stmt = (
             sa.update(self.model)
             .where(*whereclause)
             .values(**kwargs)
+            .returning(self.model)
         )
         async with self.db.get_session(session) as session:
-            await session.execute(stmt)
+            result = await session.execute(stmt)
             await session.commit()
+        return result.scalar_one()

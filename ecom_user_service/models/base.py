@@ -9,6 +9,5 @@ class BaseModel(DeclarativeBase):
     def __tablename__(self):
         return self.__name__.lower()
 
-    def __repr__(self) -> str:
-        attrs = ', '.join(f"{key}={value!r}" for key, value in self.__dict__.items())
-        return f"<{self.__class__.__name__}>({attrs})"
+    def __repr__(self):
+        return f"{self.__class__.__name__}(id={self.id})"

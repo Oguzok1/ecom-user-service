@@ -22,6 +22,6 @@ if __name__ == "__main__":
 
     uvicorn.run(
         "ecom_user_service.app:create_app",
-        host="localhost",
+        host="0.0.0.0",
         port=8001,
     )

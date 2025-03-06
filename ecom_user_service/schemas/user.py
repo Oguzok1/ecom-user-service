@@ -20,3 +20,8 @@ class UserReadSchema(BaseSchema):
     age: int = pydantic.Field(gt=0)
     name: str
     role: UserTypeEnum
+
+
+class UserPatchSchema(BaseSchema):
+    name: str | None = None
+    age: int | None = None

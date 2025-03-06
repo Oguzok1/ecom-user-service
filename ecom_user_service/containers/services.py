@@ -8,6 +8,7 @@ from dependency_injector.providers import (
 from .gateways import GatewaysContainer
 from .repositories import RepositoriesContainer
 from ..services.auth import AuthService
+from ..services.user import UserService
 
 
 class ServicesContainer(DeclarativeContainer):
@@ -23,4 +24,9 @@ class ServicesContainer(DeclarativeContainer):
         user_repository=repositories.user,
         access_token_ttl_days=config.auth.access_token_ttl_days,
         secret_key=config.auth.secret_key,
+    )
+    user: Singleton[UserService] = Singleton[UserService](
+        UserService,
+        db=gateways.db,
+        user_repository=repositories.user,
     )

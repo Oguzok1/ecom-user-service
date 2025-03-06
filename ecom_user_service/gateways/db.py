@@ -11,8 +11,8 @@ class Database:
         self,
         url: str
     ):
-        engine = create_async_engine(url, echo=True)
-        self._factory = async_sessionmaker(engine)
+        engine = create_async_engine(url, echo=True,)
+        self._factory = async_sessionmaker(engine, expire_on_commit=False)
 
     @asynccontextmanager
     async def get_session(self, session: AsyncSession | None = None) -> AsyncGenerator[AsyncSession, None]:

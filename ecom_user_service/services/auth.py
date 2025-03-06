@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 import bcrypt
+import fastapi
 from jose import jwt, JWTError
 
 from ecom_user_service.enums import UserTypeEnum
@@ -31,24 +32,30 @@ class AuthService:
         self.secret_key = secret_key
 
     async def login(
-        self, email: str, raw_password: str
+        self, response: fastapi.Response, email: str, raw_password: str
     ) -> TokenSchema:
         user = await self.user_repository.get_one_or_none(
             User.email == email,
         )
         if not user:
             raise InvalidCredentials()
-        # if not self._verify_password(raw_password, user.hashed_password):
-        #     raise InvalidCredentials()
+        if not self._verify_password(raw_password, user.hashed_password):
+            raise InvalidCredentials()
 
         user_data = {
             "id": str(user.id),
             "role": user.role,
         }
         token = self._create_access_token(user_data)
+        response.set_cookie(
+            key="token",
+            value=token,
+            httponly=True,
+            max_age=self.access_token_ttl_days * 24 * 60 * 60,
+        )
         return TokenSchema(
             token=token,
-            type="Bearer",
+            type="jwt",
         )
 
     async def register(
@@ -91,6 +98,9 @@ class AuthService:
         if not user:
             raise InvalidCredentials()
         return user
+
+    async def logout(self, response: fastapi.Response) -> None:
+        response.delete_cookie("token")
 
     def _create_access_token(self, data: dict) -> str:
         expire = (
